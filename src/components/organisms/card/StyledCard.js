@@ -11,6 +11,7 @@ export const CardWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 `;
 
 export const SaveJokesWrapper = styled.div`
@@ -20,11 +21,4 @@ export const SaveJokesWrapper = styled.div`
   align-items: center;
   text-align: center;
   /* flex: 1; */
-`;
-
-export const IconWrapper = styled.div`
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;

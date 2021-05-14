@@ -5,12 +5,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import { FormControl } from "@material-ui/core";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
-import { CardWrapper, SaveJokesWrapper, IconWrapper } from "./StyledCard";
+import { CardWrapper, SaveJokesWrapper } from "./StyledCard";
 import Button from "@material-ui/core/Button";
 import CardText from "../../atoms/CardText/CardText";
 import Container from "../../atoms/container/Container";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
+import IconWrapper from "../../atoms/IconWrapper/IconWrapper";
 
 const useStyles = makeStyles({
   formWrapper: {
@@ -40,11 +41,32 @@ const useStyles = makeStyles({
   icon: {
     cursor: "pointer",
   },
+  textField: {
+    width: "20%",
+    textAlign: "center",
+    border: 0,
+    backgroundColor: "transparent",
+    fontFamily: "Inter",
+    "&:focus": {
+      border: 0,
+      outline: 0,
+    },
+  },
 });
 
 const Card = ({ joke, drawAnotherJoke }) => {
   const [jokesCounter, setJokesCounter] = useState(0);
   const classes = useStyles();
+  const increaseJokesCounter = () => {
+    jokesCounter < 100 && setJokesCounter((prevState) => prevState + 1);
+  };
+  const decreaseJokesCounter = () => {
+    jokesCounter > 0 && setJokesCounter((prevState) => prevState - 1);
+  };
+  const changeJokesCounter = (e) => {
+    setJokesCounter(+e.target.value);
+  };
+
   return (
     <CardWrapper>
       <img src={cardImage} alt="Chuck-Norris" />
@@ -58,7 +80,7 @@ const Card = ({ joke, drawAnotherJoke }) => {
             className={classes.select}
             native
           >
-            <option></option>
+            <option value=""></option>
             <option value="explicit">Explicit</option>
             <option value="nerdy">Nerdy</option>
           </Select>
@@ -74,15 +96,38 @@ const Card = ({ joke, drawAnotherJoke }) => {
         </FormControl>
       </form>
       <SaveJokesWrapper>
-        <Container className={classes.icon}>
-          <IconWrapper>
-            <RemoveCircleOutlineIcon />
-          </IconWrapper>
-          {jokesCounter}
-          <IconWrapper>
-            <AddCircleOutlineIcon />
-          </IconWrapper>
-        </Container>
+        {jokesCounter > 100 || jokesCounter < 0 ? (
+          <Container errorStyles className={classes.icon}>
+            <IconWrapper onClickFn={decreaseJokesCounter}>
+              <RemoveCircleOutlineIcon />
+            </IconWrapper>
+            <input
+              onChange={changeJokesCounter}
+              className={classes.textField}
+              id="standard-basic"
+              value={jokesCounter}
+            />
+            <IconWrapper onClickFn={increaseJokesCounter}>
+              <AddCircleOutlineIcon />
+            </IconWrapper>
+          </Container>
+        ) : (
+          <Container className={classes.icon}>
+            <IconWrapper onClickFn={decreaseJokesCounter}>
+              <RemoveCircleOutlineIcon />
+            </IconWrapper>
+            <input
+              onChange={changeJokesCounter}
+              className={classes.textField}
+              id="standard-basic"
+              value={jokesCounter}
+            />
+            <IconWrapper onClickFn={increaseJokesCounter}>
+              <AddCircleOutlineIcon />
+            </IconWrapper>
+          </Container>
+        )}
+
         <Container saveBtn>Save Jokes</Container>
       </SaveJokesWrapper>
     </CardWrapper>
