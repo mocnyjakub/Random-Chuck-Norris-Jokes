@@ -1,7 +1,9 @@
 import styled from "styled-components";
+import breakpoints from "../../../breakpoints";
 
 export const CardWrapper = styled.div`
-  width: 555px;
+  max-width: 555px;
+  width: 100%;
   height: 704px;
   padding: 48px 58px 72px;
   border-radius: 8px;
@@ -12,6 +14,10 @@ export const CardWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   position: relative;
+  ${breakpoints.mobile} {
+    padding: 0 15px 25px;
+    height: 100vh;
+  }
 `;
 
 export const SaveJokesWrapper = styled.div`

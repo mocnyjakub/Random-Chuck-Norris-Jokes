@@ -56,6 +56,7 @@ const useStyles = makeStyles({
 
 const Card = ({ joke, drawAnotherJoke }) => {
   const [jokesCounter, setJokesCounter] = useState(0);
+  const [newPerson, setNewPerson] = useState("Chuck Norris");
   const classes = useStyles();
   const increaseJokesCounter = () => {
     jokesCounter < 100 && setJokesCounter((prevState) => prevState + 1);
@@ -65,6 +66,11 @@ const Card = ({ joke, drawAnotherJoke }) => {
   };
   const changeJokesCounter = (e) => {
     setJokesCounter(+e.target.value);
+  };
+  const handleNewPerson = (e) => {
+    e.target.value
+      ? setNewPerson(e.target.value)
+      : setNewPerson("Chuck Norris");
   };
 
   return (
@@ -86,12 +92,13 @@ const Card = ({ joke, drawAnotherJoke }) => {
           </Select>
 
           <TextField
+            onChange={handleNewPerson}
             placeholder="Impersonate Chuck Norris"
             className={classes.select}
             variant="outlined"
           ></TextField>
           <Button type="submit" variant="contained" className={classes.button}>
-            Draw a random Chuck Norris Joke
+            Draw a random {newPerson} Joke
           </Button>
         </FormControl>
       </form>
@@ -127,8 +134,13 @@ const Card = ({ joke, drawAnotherJoke }) => {
             </IconWrapper>
           </Container>
         )}
-
-        <Container saveBtn>Save Jokes</Container>
+        {jokesCounter > 0 ? (
+          <Container saveBtn focusStyle>
+            Save Jokes
+          </Container>
+        ) : (
+          <Container saveBtn>Save Jokes</Container>
+        )}
       </SaveJokesWrapper>
     </CardWrapper>
   );
