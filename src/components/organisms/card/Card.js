@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import cardImage from "../../../assets/images/Chuck Norris photo.png";
 import InputLabel from "@material-ui/core/InputLabel";
 import { makeStyles } from "@material-ui/core/styles";
 import { FormControl } from "@material-ui/core";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
-import { CardWrapper, SaveJokesWrapper } from "./StyledCard";
+import { CardWrapper, SaveJokesWrapper, IconWrapper } from "./StyledCard";
 import Button from "@material-ui/core/Button";
 import CardText from "../../atoms/CardText/CardText";
 import Container from "../../atoms/container/Container";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline";
 
 const useStyles = makeStyles({
   formWrapper: {
@@ -35,46 +37,52 @@ const useStyles = makeStyles({
       color: "#000",
     },
   },
+  icon: {
+    cursor: "pointer",
+  },
 });
 
 const Card = ({ joke, drawAnotherJoke }) => {
+  const [jokesCounter, setJokesCounter] = useState(0);
   const classes = useStyles();
   return (
     <CardWrapper>
       <img src={cardImage} alt="Chuck-Norris" />
       <CardText joke={joke} />
+      <form style={{ width: `100%` }} onSubmit={drawAnotherJoke}>
+        <FormControl variant="filled" className={classes.formWrapper}>
+          <InputLabel>Categories</InputLabel>
+          <Select
+            name="categoryName"
+            id="categoryName"
+            className={classes.select}
+            native
+          >
+            <option></option>
+            <option value="explicit">Explicit</option>
+            <option value="nerdy">Nerdy</option>
+          </Select>
 
-      <FormControl variant="filled" className={classes.formWrapper}>
-        <InputLabel>Categories</InputLabel>
-        <Select
-          className={classes.select}
-          native
-          inputProps={{
-            name: "age",
-            id: "filled-age-native-simple",
-          }}
-        >
-          <option></option>
-          <option>Explicit</option>
-          <option>Nerdy</option>
-        </Select>
-
-        <TextField
-          placeholder="Impersonate Chuck Norris"
-          className={classes.select}
-          variant="outlined"
-        ></TextField>
-        <Button
-          type="submit"
-          onClick={drawAnotherJoke}
-          variant="contained"
-          className={classes.button}
-        >
-          Draw a random Chuck Norris Joke
-        </Button>
-      </FormControl>
+          <TextField
+            placeholder="Impersonate Chuck Norris"
+            className={classes.select}
+            variant="outlined"
+          ></TextField>
+          <Button type="submit" variant="contained" className={classes.button}>
+            Draw a random Chuck Norris Joke
+          </Button>
+        </FormControl>
+      </form>
       <SaveJokesWrapper>
-        <Container>- 122 +</Container>
+        <Container className={classes.icon}>
+          <IconWrapper>
+            <RemoveCircleOutlineIcon />
+          </IconWrapper>
+          {jokesCounter}
+          <IconWrapper>
+            <AddCircleOutlineIcon />
+          </IconWrapper>
+        </Container>
         <Container saveBtn>Save Jokes</Container>
       </SaveJokesWrapper>
     </CardWrapper>

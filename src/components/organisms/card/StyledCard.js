@@ -21,3 +21,10 @@ export const SaveJokesWrapper = styled.div`
   text-align: center;
   /* flex: 1; */
 `;
+
+export const IconWrapper = styled.div`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
