@@ -3,8 +3,6 @@ import axios from "axios";
 import Card from "../components/organisms/card/Card";
 import MainTemplate from "../components/templates/MainTemplate";
 import RootContext from "../context";
-import "write";
-import write from "write";
 
 const Root = () => {
   const [joke, setJoke] = useState("");
@@ -12,13 +10,43 @@ const Root = () => {
   const [newPerson, setNewPerson] = useState("Chuck Norris");
   const [jokesCounter, setJokesCounter] = useState(0);
   const [fetchRandomJokesArray, setFetchRandomJokesArray] = useState([]);
-  const [apiUrl, setApiUrl] = useState("http://api.icndb.com/jokes/random");
+  const [apiUrl, setApiUrl] = useState("https://api.icndb.com/jokes/random");
   const [category, setCategory] = useState("random");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+
+  useEffect(() => {
+    const fetchJoke = async () => {
+      await axios
+        .get(apiUrl)
+        .then((res) => setJoke(res.data.value.joke))
+        .catch((error) => console.log(error));
+    };
+    fetchJoke();
+  }, [nextJokeRender, apiUrl]);
+
+  useEffect(() => {
+    const arrayDivided = newPerson.split(/\b/);
+    let baseURL;
+    if (category === "random") {
+      baseURL = `https://api.icndb.com/jokes/random/${jokesCounter}?firstName=${
+        arrayDivided[0]
+      }&lastName=${arrayDivided.length > 2 ? arrayDivided[2] : ""}`;
+    } else {
+      baseURL = `https://api.icndb.com/jokes/random/${jokesCounter}?firstName=${
+        arrayDivided[0]
+      }&lastName=${
+        arrayDivided.length > 2 ? arrayDivided[2] : ""
+      }&limitTo=[${category}]`;
+    }
+    const fetchRandomJokes = async () => {
+      await axios
+        .get(baseURL)
+        .then((res) => setFetchRandomJokesArray(res.data.value))
+        .catch((error) => console.log(error));
+    };
+    fetchRandomJokes();
+  }, [jokesCounter, category, newPerson]);
 
   const drawAnotherJoke = (e) => {
-    // http://api.icndb.com/jokes/random?firstName=Kuba&lastName=Mocny&limitTo=[nerdy]
     e.preventDefault();
     const category = e.target.categoryName.value;
     setCategory(category);
@@ -28,16 +56,16 @@ const Root = () => {
       arrayDividedBySpacing[0] === "Chuck" &&
       arrayDividedBySpacing[2] === "Norris"
     ) {
-      setApiUrl(`http://api.icndb.com/jokes/random`);
+      setApiUrl(`https://api.icndb.com/jokes/random`);
     } else if (
       category !== "random" &&
       arrayDividedBySpacing[0] === "Chuck" &&
       arrayDividedBySpacing[2] === "Norris"
     ) {
-      setApiUrl(`http://api.icndb.com/jokes/random?limitTo=[${category}]`);
+      setApiUrl(`https://api.icndb.com/jokes/random?limitTo=[${category}]`);
     } else if (category === "random" && arrayDividedBySpacing[0] !== "Chuck") {
       setApiUrl(
-        `http://api.icndb.com/jokes/random?firstName=${
+        `https://api.icndb.com/jokes/random?firstName=${
           arrayDividedBySpacing[0]
         }&lastName=${
           arrayDividedBySpacing.length > 2 ? arrayDividedBySpacing[2] : ""
@@ -45,7 +73,7 @@ const Root = () => {
       );
     } else {
       setApiUrl(
-        `http://api.icndb.com/jokes/random?firstName=${
+        `https://api.icndb.com/jokes/random?firstName=${
           arrayDividedBySpacing[0]
         }&lastName=${
           arrayDividedBySpacing.length > 2 ? arrayDividedBySpacing[2] : ""
@@ -69,37 +97,7 @@ const Root = () => {
   const changeJokesCounter = (e) => {
     setJokesCounter(+e.target.value);
   };
-  useEffect(() => {
-    const fetchJoke = async () => {
-      await axios
-        .get(apiUrl)
-        .then((res) => setJoke(res.data.value.joke))
-        .catch((error) => console.log(error));
-    };
-    fetchJoke();
-  }, [nextJokeRender, apiUrl]);
-  useEffect(() => {
-    const arrayDivided = newPerson.split(/\b/);
-    let baseURL;
-    if (category === "random") {
-      baseURL = `http://api.icndb.com/jokes/random/${jokesCounter}?firstName=${
-        arrayDivided[0]
-      }&lastName=${arrayDivided.length > 2 ? arrayDivided[2] : ""}`;
-    } else {
-      baseURL = `http://api.icndb.com/jokes/random/${jokesCounter}?firstName=${
-        arrayDivided[0]
-      }&lastName=${
-        arrayDivided.length > 2 ? arrayDivided[2] : ""
-      }&limitTo=[${category}]`;
-    }
-    const fetchRandomJokes = async () => {
-      await axios
-        .get(baseURL)
-        .then((res) => setFetchRandomJokesArray(res.data.value))
-        .catch((error) => console.log(error));
-    };
-    fetchRandomJokes();
-  }, [jokesCounter]);
+
   const createJokesFile = () => {
     if (jokesCounter <= 100 && jokesCounter !== 0) {
       const element = document.createElement("a");
