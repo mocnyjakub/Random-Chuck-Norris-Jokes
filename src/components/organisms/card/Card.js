@@ -70,7 +70,11 @@ const Card = () => {
       </form>
       <SaveJokesWrapper>
         <>{_renderJokesCounter()}</>
-        <Container saveBtn focusStyle={context.jokesCounter > 0 ? true : false}>
+        <Container
+          createJokesFile={context.createJokesFile}
+          saveBtn
+          focusStyle={context.jokesCounter > 0 ? true : false}
+        >
           Save Jokes
         </Container>
       </SaveJokesWrapper>

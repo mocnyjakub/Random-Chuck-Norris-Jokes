@@ -3,20 +3,26 @@ import axios from "axios";
 import Card from "../components/organisms/card/Card";
 import MainTemplate from "../components/templates/MainTemplate";
 import RootContext from "../context";
+import "write";
+import write from "write";
 
 const Root = () => {
   const [joke, setJoke] = useState("");
   const [nextJokeRender, setNextJokeRender] = useState(false);
   const [newPerson, setNewPerson] = useState("Chuck Norris");
   const [jokesCounter, setJokesCounter] = useState(0);
+  const [fetchRandomJokesArray, setFetchRandomJokesArray] = useState([]);
   const [apiUrl, setApiUrl] = useState("http://api.icndb.com/jokes/random");
+  const [category, setCategory] = useState("random");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   const drawAnotherJoke = (e) => {
     // http://api.icndb.com/jokes/random?firstName=Kuba&lastName=Mocny&limitTo=[nerdy]
     e.preventDefault();
     const category = e.target.categoryName.value;
+    setCategory(category);
     const arrayDividedBySpacing = newPerson.split(/\b/);
-    console.log(arrayDividedBySpacing);
     if (
       category === "random" &&
       arrayDividedBySpacing[0] === "Chuck" &&
@@ -29,24 +35,25 @@ const Root = () => {
       arrayDividedBySpacing[2] === "Norris"
     ) {
       setApiUrl(`http://api.icndb.com/jokes/random?limitTo=[${category}]`);
+    } else if (category === "random" && arrayDividedBySpacing[0] !== "Chuck") {
+      setApiUrl(
+        `http://api.icndb.com/jokes/random?firstName=${
+          arrayDividedBySpacing[0]
+        }&lastName=${
+          arrayDividedBySpacing.length > 2 ? arrayDividedBySpacing[2] : ""
+        }`
+      );
     } else {
       setApiUrl(
         `http://api.icndb.com/jokes/random?firstName=${
           arrayDividedBySpacing[0]
         }&lastName=${
-          arrayDividedBySpacing.length > 2 ? arrayDividedBySpacing[2] : "Norris"
+          arrayDividedBySpacing.length > 2 ? arrayDividedBySpacing[2] : ""
         }&limitTo=[${category}]`
       );
     }
 
     setNextJokeRender((prevState) => !prevState);
-    // const category = e.target.categoryName.value;
-    // if (category === "random") {
-    //   setApiUrl(`http://api.icndb.com/jokes/random`);
-    // } else {
-    //   setApiUrl(`http://api.icndb.com/jokes/random?limitTo=[${category}]`);
-    // }
-    // setNextJokeRender((prevState) => !prevState);
   };
   const handleNewPerson = (e) => {
     e.target.value
@@ -62,7 +69,6 @@ const Root = () => {
   const changeJokesCounter = (e) => {
     setJokesCounter(+e.target.value);
   };
-
   useEffect(() => {
     const fetchJoke = async () => {
       await axios
@@ -72,6 +78,43 @@ const Root = () => {
     };
     fetchJoke();
   }, [nextJokeRender, apiUrl]);
+  useEffect(() => {
+    const arrayDivided = newPerson.split(/\b/);
+    let baseURL;
+    if (category === "random") {
+      baseURL = `http://api.icndb.com/jokes/random/${jokesCounter}?firstName=${
+        arrayDivided[0]
+      }&lastName=${arrayDivided.length > 2 ? arrayDivided[2] : ""}`;
+    } else {
+      baseURL = `http://api.icndb.com/jokes/random/${jokesCounter}?firstName=${
+        arrayDivided[0]
+      }&lastName=${
+        arrayDivided.length > 2 ? arrayDivided[2] : ""
+      }&limitTo=[${category}]`;
+    }
+    const fetchRandomJokes = async () => {
+      await axios
+        .get(baseURL)
+        .then((res) => setFetchRandomJokesArray(res.data.value))
+        .catch((error) => console.log(error));
+    };
+    fetchRandomJokes();
+  }, [jokesCounter]);
+  const createJokesFile = () => {
+    if (jokesCounter <= 100 && jokesCounter !== 0) {
+      const element = document.createElement("a");
+      const file = new Blob(
+        fetchRandomJokesArray.map((Eachjoke) => Eachjoke.joke + "\n"),
+        { type: "text/plain" }
+      );
+      element.href = URL.createObjectURL(file);
+      element.download = "Jokes.txt";
+      document.body.appendChild(element);
+      element.click();
+    } else {
+      alert("You can pick a number from 1 to 100");
+    }
+  };
   return (
     <RootContext.Provider
       value={{
@@ -85,6 +128,7 @@ const Root = () => {
         increaseJokesCounter,
         decreaseJokesCounter,
         changeJokesCounter,
+        createJokesFile,
       }}
     >
       <MainTemplate>
