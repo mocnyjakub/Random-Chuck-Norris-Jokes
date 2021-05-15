@@ -18,6 +18,9 @@ export const CardWrapper = styled.div`
     padding: 0 15px 25px;
     height: 100vh;
   }
+  form {
+    width: 100%;
+  }
 `;
 
 export const SaveJokesWrapper = styled.div`
@@ -26,5 +29,4 @@ export const SaveJokesWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   text-align: center;
-  /* flex: 1; */
 `;

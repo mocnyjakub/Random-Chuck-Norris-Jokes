@@ -1,18 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import RootContext from "../../../context";
 
 export const StyledP = styled.p`
-  font-size: 18px;
-  font-weight: 600;
+  font-size: ${({ theme }) => theme.fontSizes.m};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
   font-style: italic;
   letter-spacing: normal;
   text-align: left;
   color: ${({ theme }) => theme.colors.dark};
-  /* flex: 1; */
 `;
 
-const CardText = ({ joke }) => {
-  return <StyledP>“{joke}”.</StyledP>;
+const CardText = () => {
+  const context = useContext(RootContext);
+  return <StyledP>“{context.joke}”.</StyledP>;
 };
 
 export default CardText;

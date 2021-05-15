@@ -4,7 +4,7 @@ import { GlobalStyle } from "../../styles/GlobalStyle";
 import { theme } from "../../styles/theme";
 
 const MainLayout = styled.div`
-  width: 100%;
+  width: 100vw;
   min-height: 100vh;
   display: flex;
   justify-content: center;
