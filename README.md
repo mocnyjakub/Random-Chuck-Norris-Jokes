@@ -36,7 +36,7 @@
 
 ## Screenshots
 
-![App Screenshot](random-chuck-norris-jokes/src/assets/images/app-screen.png)
+![App Screenshot](app-screen.png)
 
 ## Usage
 
