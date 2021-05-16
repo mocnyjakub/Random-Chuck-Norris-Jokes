@@ -10,7 +10,9 @@ const Root = () => {
   const [newPerson, setNewPerson] = useState("Chuck Norris");
   const [jokesCounter, setJokesCounter] = useState(0);
   const [fetchRandomJokesArray, setFetchRandomJokesArray] = useState([]);
-  const [apiUrl, setApiUrl] = useState("https://api.icndb.com/jokes/random");
+  const [apiUrl, setApiUrl] = useState(
+    "https://api.icndb.com/jokes/random&escape=javascript"
+  );
   const [category, setCategory] = useState("random");
 
   useEffect(() => {
@@ -29,13 +31,15 @@ const Root = () => {
     if (category === "random") {
       baseURL = `https://api.icndb.com/jokes/random/${jokesCounter}?firstName=${
         arrayDivided[0]
-      }&lastName=${arrayDivided.length > 2 ? arrayDivided[2] : ""}`;
+      }&lastName=${
+        arrayDivided.length > 2 ? arrayDivided[2] : ""
+      }&escape=javascript`;
     } else {
       baseURL = `https://api.icndb.com/jokes/random/${jokesCounter}?firstName=${
         arrayDivided[0]
       }&lastName=${
         arrayDivided.length > 2 ? arrayDivided[2] : ""
-      }&limitTo=[${category}]`;
+      }&limitTo=[${category}]&escape=javascript`;
     }
     const fetchRandomJokes = async () => {
       await axios
@@ -56,20 +60,22 @@ const Root = () => {
       arrayDividedBySpacing[0] === "Chuck" &&
       arrayDividedBySpacing[2] === "Norris"
     ) {
-      setApiUrl(`https://api.icndb.com/jokes/random`);
+      setApiUrl(`https://api.icndb.com/jokes/random&escape=javascript`);
     } else if (
       category !== "random" &&
       arrayDividedBySpacing[0] === "Chuck" &&
       arrayDividedBySpacing[2] === "Norris"
     ) {
-      setApiUrl(`https://api.icndb.com/jokes/random?limitTo=[${category}]`);
+      setApiUrl(
+        `https://api.icndb.com/jokes/random?limitTo=[${category}]&escape=javascript`
+      );
     } else if (category === "random" && arrayDividedBySpacing[0] !== "Chuck") {
       setApiUrl(
         `https://api.icndb.com/jokes/random?firstName=${
           arrayDividedBySpacing[0]
         }&lastName=${
           arrayDividedBySpacing.length > 2 ? arrayDividedBySpacing[2] : ""
-        }`
+        }&escape=javascript`
       );
     } else {
       setApiUrl(
@@ -77,7 +83,7 @@ const Root = () => {
           arrayDividedBySpacing[0]
         }&lastName=${
           arrayDividedBySpacing.length > 2 ? arrayDividedBySpacing[2] : ""
-        }&limitTo=[${category}]`
+        }&limitTo=[${category}]&escape=javascript`
       );
     }
 
