@@ -11,7 +11,7 @@ const Root = () => {
   const [jokesCounter, setJokesCounter] = useState(0);
   const [fetchRandomJokesArray, setFetchRandomJokesArray] = useState([]);
   const [apiUrl, setApiUrl] = useState(
-    "https://api.icndb.com/jokes/random&escape=javascript"
+    "https://api.icndb.com/jokes/random?escape=javascript"
   );
   const [category, setCategory] = useState("random");
 
