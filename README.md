@@ -36,7 +36,7 @@
 
 ## Screenshots
 
-![App Screenshot](app-screen.png)
+![App Screenshot](https://user-images.githubusercontent.com/77330053/118411916-62de8800-b697-11eb-96a1-b878b23924b3.png)
 
 ## Usage
 
