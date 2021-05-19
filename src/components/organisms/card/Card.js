@@ -73,7 +73,11 @@ const Card = () => {
         <Container
           createJokesFile={context.createJokesFile}
           saveBtn
-          focusStyle={context.jokesCounter > 0 ? true : false}
+          focusStyle={
+            context.jokesCounter > 0 && context.jokesCounter <= 100
+              ? true
+              : false
+          }
         >
           Save Jokes
         </Container>
