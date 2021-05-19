@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import cardImage from "../../../assets/images/Chuck Norris photo.png";
 import InputLabel from "@material-ui/core/InputLabel";
 import { FormControl } from "@material-ui/core";
 import Select from "@material-ui/core/Select";
@@ -41,7 +40,7 @@ const Card = () => {
   const context = useContext(RootContext);
   return (
     <CardWrapper>
-      <img src={cardImage} alt="Chuck-Norris" />
+      <img src={context.renderCardImg()} alt="Chuck-Norris" />
       <CardText />
       <form onSubmit={context.drawAnotherJoke}>
         <FormControl variant="filled" className={classes.formWrapper}>

@@ -3,11 +3,14 @@ import axios from "axios";
 import Card from "../components/organisms/card/Card";
 import MainTemplate from "../components/templates/MainTemplate";
 import RootContext from "../context";
+import cardImage from "../assets/images/Chuck Norris photo.png";
+import impersonateImage from "../assets/images/Random photo.png";
 
 const Root = () => {
   const [joke, setJoke] = useState("");
   const [nextJokeRender, setNextJokeRender] = useState(false);
   const [newPerson, setNewPerson] = useState("Chuck Norris");
+  const [submittedPerson, setSubmittedPerson] = useState("Chuck Norris");
   const [jokesCounter, setJokesCounter] = useState(0);
   const [fetchRandomJokesArray, setFetchRandomJokesArray] = useState([]);
   const [apiUrl, setApiUrl] = useState(
@@ -88,6 +91,7 @@ const Root = () => {
     }
 
     setNextJokeRender((prevState) => !prevState);
+    setSubmittedPerson(newPerson);
   };
   const handleNewPerson = (e) => {
     e.target.value
@@ -119,6 +123,10 @@ const Root = () => {
       alert("You can pick a number from 1 to 100");
     }
   };
+  const renderCardImg = () => {
+    return submittedPerson !== "Chuck Norris" ? impersonateImage : cardImage;
+  };
+
   return (
     <RootContext.Provider
       value={{
@@ -133,6 +141,7 @@ const Root = () => {
         decreaseJokesCounter,
         changeJokesCounter,
         createJokesFile,
+        renderCardImg,
       }}
     >
       <MainTemplate>
