@@ -15,17 +15,17 @@ const Root = () => {
   );
   const [category, setCategory] = useState("random");
 
+  const saveJoke = () => {
+    axios
+      .get(apiUrl)
+      .then((res) => setJoke(res.data.value.joke))
+      .catch((error) => console.log(error));
+  };
   useEffect(() => {
-    const fetchJoke = async () => {
-      await axios
-        .get(apiUrl)
-        .then((res) => setJoke(res.data.value.joke))
-        .catch((error) => console.log(error));
-    };
-    fetchJoke();
+    saveJoke();
   }, [nextJokeRender, apiUrl]);
 
-  useEffect(() => {
+  const fetchRandomJokes = () => {
     const arrayDivided = newPerson.split(/\b/);
     let baseURL;
     if (category === "random") {
@@ -41,12 +41,12 @@ const Root = () => {
         arrayDivided.length > 2 ? arrayDivided[2] : ""
       }&limitTo=[${category}]&escape=javascript`;
     }
-    const fetchRandomJokes = async () => {
-      await axios
-        .get(baseURL)
-        .then((res) => setFetchRandomJokesArray(res.data.value))
-        .catch((error) => console.log(error));
-    };
+    axios
+      .get(baseURL)
+      .then((res) => setFetchRandomJokesArray(res.data.value))
+      .catch((error) => console.log(error));
+  };
+  useEffect(() => {
     fetchRandomJokes();
   }, [jokesCounter, category, newPerson]);
 
