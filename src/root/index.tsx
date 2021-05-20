@@ -26,8 +26,7 @@ const Root:FC = () => {
   const [category, setCategory] = useState("random");
 
   
-// TODO:
-  const saveJoke = (): void => {
+  const saveJoke = () => {
     axios
       .get(apiUrl)
       .then((res) => setJoke(res.data.value.joke))
