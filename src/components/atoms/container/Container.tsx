@@ -2,11 +2,11 @@ import React, { FC } from "react";
 import { ContainerWrapper } from "./StyledContainer";
 
 interface ContainerProps{
-  children?:React.ReactNode;
-  saveBtn?:boolean | undefined;
-  errorStyles?:boolean | undefined;
-  focusStyles?:boolean | undefined;
-  createJokesFile?: ()=> void | undefined;
+  children:React.ReactNode;
+  saveBtn?:boolean;
+  errorStyles?:boolean;
+  focusStyles?:boolean;
+  createJokesFile?: ()=> void;
   className?:string;
   
 }
