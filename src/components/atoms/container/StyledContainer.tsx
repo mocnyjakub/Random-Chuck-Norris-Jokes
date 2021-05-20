@@ -1,15 +1,21 @@
 import styled, { css } from "styled-components";
 import breakpoints from "../../../breakpoints";
 
-export const ContainerWrapper = styled.div`
+interface ContainerWrapperProps {
+  saveBtn:boolean | undefined;
+  errorStyles:boolean | undefined;
+  focusStyles:boolean | undefined;
+}
+
+export const ContainerWrapper = styled.div<ContainerWrapperProps>`
   display: flex;
   align-items: center;
   justify-content: ${({ saveBtn }) => (saveBtn ? "center" : `space-evenly`)};
   border-radius: 6px;
-  color: ${({ focusStyle }) => (focusStyle ? "#fff" : "#34394f")};
+  color: ${({ focusStyles }) => (focusStyles ? "#fff" : "#34394f")};
   background-color: ${({ errorStyles }) =>
     errorStyles ? "#f39a9a" : "#f5f6f8"};
-  background-color: ${({ focusStyle }) => focusStyle && "#34394f"};
+  background-color: ${({ focusStyles }) => focusStyles && "#34394f"};
   padding: 18px 0;
   font-size: ${({ theme }) => theme.fontSizes.s};
   flex: ${({ saveBtn }) => (saveBtn ? 2 : 1)};

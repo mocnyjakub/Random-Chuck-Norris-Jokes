@@ -24,3 +24,5 @@ export const theme = {
     extraBold: 700,
   },
 };
+
+export type ThemeType = typeof theme

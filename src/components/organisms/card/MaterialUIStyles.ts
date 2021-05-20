@@ -20,7 +20,7 @@ export const useStyles = makeStyles({
     fontSize: `${theme.fontSizes.s}`,
     letterSpacing: -0.52,
     textTransform: "none",
-    fontWeight: `${theme.fontWeights.bold}`,
+    fontWeight: theme.fontWeights.bold,
     "&:hover": {
       color: `${theme.colors.black}`,
     },

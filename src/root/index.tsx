@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FC } from "react";
 import axios from "axios";
 import Card from "../components/organisms/card/Card";
 import MainTemplate from "../components/templates/MainTemplate";
@@ -6,19 +6,28 @@ import RootContext from "../context";
 import cardImage from "../assets/images/Chuck Norris photo.png";
 import impersonateImage from "../assets/images/Random photo.png";
 
-const Root = () => {
+
+interface RandomJokesArrayObj{
+  id:string;
+  joke:string;
+  categories:string[];
+}
+
+const Root:FC = () => {
   const [joke, setJoke] = useState("");
   const [nextJokeRender, setNextJokeRender] = useState(false);
   const [newPerson, setNewPerson] = useState("Chuck Norris");
   const [submittedPerson, setSubmittedPerson] = useState("Chuck Norris");
   const [jokesCounter, setJokesCounter] = useState(0);
-  const [fetchRandomJokesArray, setFetchRandomJokesArray] = useState([]);
+  const [fetchRandomJokesArray, setFetchRandomJokesArray] = useState<RandomJokesArrayObj[]>([]);
   const [apiUrl, setApiUrl] = useState(
     "https://api.icndb.com/jokes/random?escape=javascript"
   );
   const [category, setCategory] = useState("random");
 
-  const saveJoke = () => {
+  
+// TODO:
+  const saveJoke = (): void => {
     axios
       .get(apiUrl)
       .then((res) => setJoke(res.data.value.joke))
@@ -30,7 +39,7 @@ const Root = () => {
 
   const fetchRandomJokes = () => {
     const arrayDivided = newPerson.split(/\b/);
-    let baseURL;
+    let baseURL:string;
     if (category === "random") {
       baseURL = `https://api.icndb.com/jokes/random/${jokesCounter}?firstName=${
         arrayDivided[0]
@@ -53,9 +62,12 @@ const Root = () => {
     fetchRandomJokes();
   }, [jokesCounter, category, newPerson]);
 
-  const drawAnotherJoke = (e) => {
+  const drawAnotherJoke = (e: React.SyntheticEvent):void => {
     e.preventDefault();
-    const category = e.target.categoryName.value;
+    const target = e.target as typeof e.target & {
+      categoryName: { value: string };
+    };
+    const category = target.categoryName.value;
     setCategory(category);
     const arrayDividedBySpacing = newPerson.split(/\b/);
     if (
@@ -93,9 +105,9 @@ const Root = () => {
     setNextJokeRender((prevState) => !prevState);
     setSubmittedPerson(newPerson);
   };
-  const handleNewPerson = (e) => {
-    e.target.value
-      ? setNewPerson(e.target.value)
+  const handleNewPerson = (e: React.ChangeEvent<HTMLInputElement>):void =>{
+    e.currentTarget.value
+      ? setNewPerson(e.currentTarget.value)
       : setNewPerson("Chuck Norris");
   };
   const increaseJokesCounter = () => {
@@ -104,11 +116,11 @@ const Root = () => {
   const decreaseJokesCounter = () => {
     jokesCounter > 0 && setJokesCounter((prevState) => prevState - 1);
   };
-  const changeJokesCounter = (e) => {
-    setJokesCounter(+e.target.value);
+  const changeJokesCounter = (e:React.ChangeEvent<HTMLInputElement>) => {
+    setJokesCounter(+e.currentTarget.value);
   };
 
-  const createJokesFile = () => {
+  const createJokesFile= () => {
     if (jokesCounter <= 100 && jokesCounter !== 0) {
       const element = document.createElement("a");
       const file = new Blob(

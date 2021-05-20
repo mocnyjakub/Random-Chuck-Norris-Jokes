@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 const Wrapper = styled.div`
   cursor: pointer;
@@ -7,7 +7,12 @@ const Wrapper = styled.div`
   justify-content: center;
 `;
 
-const IconWrapper = ({ children, onClickFn }) => {
+interface IconWrapperProps {
+  children: React.ReactNode;
+  onClickFn : ()=>void;
+}
+
+const IconWrapper:FC<IconWrapperProps> = ({ children, onClickFn }) => {
   return <Wrapper onClick={onClickFn}>{children}</Wrapper>;
 };
 

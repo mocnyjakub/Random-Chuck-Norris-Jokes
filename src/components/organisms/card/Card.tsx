@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { FC, useContext } from "react";
 import InputLabel from "@material-ui/core/InputLabel";
 import { FormControl } from "@material-ui/core";
 import Select from "@material-ui/core/Select";
@@ -13,8 +13,10 @@ import IconWrapper from "../../atoms/IconWrapper/IconWrapper";
 import RootContext from "../../../context";
 import { useStyles } from "./MaterialUIStyles";
 
-const Card = () => {
+
+const Card:FC = () => {
   const classes = useStyles();
+  const context = useContext(RootContext);
   const _renderJokesCounter = () => (
     <Container
       errorStyles={
@@ -37,10 +39,9 @@ const Card = () => {
     </Container>
   );
 
-  const context = useContext(RootContext);
   return (
     <CardWrapper>
-      <img src={context.renderCardImg()} alt="Chuck-Norris" />
+      <img src={context.renderCardImg()} alt="Chuck Norris" />
       <CardText />
       <form onSubmit={context.drawAnotherJoke}>
         <FormControl variant="filled" className={classes.formWrapper}>
@@ -72,7 +73,7 @@ const Card = () => {
         <Container
           createJokesFile={context.createJokesFile}
           saveBtn
-          focusStyle={
+          focusStyles={
             context.jokesCounter > 0 && context.jokesCounter <= 100
               ? true
               : false

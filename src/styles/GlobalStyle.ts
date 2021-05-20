@@ -1,6 +1,7 @@
 import { createGlobalStyle } from "styled-components";
+import {ThemeType} from './theme'
 
-export const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle<{theme:ThemeType}>`
 html {
     box-sizing: border-box;
   }
@@ -13,7 +14,7 @@ html {
   
   body {
     font-family: 'Inter', sans-serif;
-    background-color:${({ theme }) => theme.colors.bodyBGC};;
+    background-color:${({theme})=> theme.colors.bodyBGC};
   }
   
   a, button {

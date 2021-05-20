@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { FC, useContext } from "react";
 import styled from "styled-components";
 import RootContext from "../../../context";
 
@@ -11,7 +11,7 @@ export const StyledP = styled.p`
   color: ${({ theme }) => theme.colors.dark};
 `;
 
-const CardText = () => {
+const CardText: FC = ():JSX.Element => {
   const context = useContext(RootContext);
   return <StyledP>“{context.joke}”.</StyledP>;
 };
