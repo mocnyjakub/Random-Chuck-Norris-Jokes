@@ -7,65 +7,75 @@ import cardImage from "../assets/images/Chuck Norris photo.png";
 import impersonateImage from "../assets/images/Random photo.png";
 
 
-interface RandomJokesArrayObj{
-  id:string;
-  joke:string;
-  categories:string[];
+type JokeCategory = 'explicit' | 'nerdy';
+
+type JokeObject = {
+  id: number,
+  joke: string,
+  categories: [keyof JokeCategory] | [],
+}
+interface APIResponseJokeObj {
+  type: "success" | "failed" | string,
+  value: JokeObject,
+}
+interface APIResponseJokesArray{
+  type: "success" | "failed" | string,
+  value:JokeObject[],
 }
 
-const Root:FC = () => {
+
+
+const Root: FC = () => {
   const [joke, setJoke] = useState("");
   const [nextJokeRender, setNextJokeRender] = useState(false);
   const [newPerson, setNewPerson] = useState("Chuck Norris");
   const [submittedPerson, setSubmittedPerson] = useState("Chuck Norris");
   const [jokesCounter, setJokesCounter] = useState(0);
-  const [fetchRandomJokesArray, setFetchRandomJokesArray] = useState<RandomJokesArrayObj[]>([]);
+  const [fetchRandomJokesArray, setFetchRandomJokesArray] = useState<JokeObject[]>([]);
   const [apiUrl, setApiUrl] = useState(
     "https://api.icndb.com/jokes/random?escape=javascript"
   );
   const [category, setCategory] = useState("random");
 
-  
-  const saveJoke = () => {
+  const fetchRadomJoke = () => {
     axios
-      .get(apiUrl)
+      .get<APIResponseJokeObj>(apiUrl)
       .then((res) => setJoke(res.data.value.joke))
       .catch((error) => console.log(error));
   };
+
   useEffect(() => {
-    saveJoke();
+    fetchRadomJoke();
   }, [nextJokeRender, apiUrl]);
 
-  const fetchRandomJokes = () => {
+  const fetchJokesByQuantity = () => {
     const arrayDivided = newPerson.split(/\b/);
-    let baseURL:string;
+    let baseURL: string;
     if (category === "random") {
-      baseURL = `https://api.icndb.com/jokes/random/${jokesCounter}?firstName=${
-        arrayDivided[0]
-      }&lastName=${
-        arrayDivided.length > 2 ? arrayDivided[2] : ""
-      }&escape=javascript`;
+      baseURL = `https://api.icndb.com/jokes/random/${jokesCounter}?firstName=${arrayDivided[0]
+        }&lastName=${arrayDivided.length > 2 ? arrayDivided[2] : ""
+        }&escape=javascript`;
     } else {
-      baseURL = `https://api.icndb.com/jokes/random/${jokesCounter}?firstName=${
-        arrayDivided[0]
-      }&lastName=${
-        arrayDivided.length > 2 ? arrayDivided[2] : ""
-      }&limitTo=[${category}]&escape=javascript`;
+      baseURL = `https://api.icndb.com/jokes/random/${jokesCounter}?firstName=${arrayDivided[0]
+        }&lastName=${arrayDivided.length > 2 ? arrayDivided[2] : ""
+        }&limitTo=[${category}]&escape=javascript`;
     }
     axios
-      .get(baseURL)
+      .get<APIResponseJokesArray>(baseURL)
       .then((res) => setFetchRandomJokesArray(res.data.value))
       .catch((error) => console.log(error));
   };
+
   useEffect(() => {
-    fetchRandomJokes();
+    fetchJokesByQuantity();
   }, [jokesCounter, category, newPerson]);
 
-  const drawAnotherJoke = (e: React.SyntheticEvent):void => {
+  const drawAnotherJoke = (e: React.SyntheticEvent): void => {
     e.preventDefault();
     const target = e.target as typeof e.target & {
       categoryName: { value: string };
     };
+
     const category = target.categoryName.value;
     setCategory(category);
     const arrayDividedBySpacing = newPerson.split(/\b/);
@@ -85,18 +95,14 @@ const Root:FC = () => {
       );
     } else if (category === "random" && arrayDividedBySpacing[0] !== "Chuck") {
       setApiUrl(
-        `https://api.icndb.com/jokes/random?firstName=${
-          arrayDividedBySpacing[0]
-        }&lastName=${
-          arrayDividedBySpacing.length > 2 ? arrayDividedBySpacing[2] : ""
+        `https://api.icndb.com/jokes/random?firstName=${arrayDividedBySpacing[0]
+        }&lastName=${arrayDividedBySpacing.length > 2 ? arrayDividedBySpacing[2] : ""
         }&escape=javascript`
       );
     } else {
       setApiUrl(
-        `https://api.icndb.com/jokes/random?firstName=${
-          arrayDividedBySpacing[0]
-        }&lastName=${
-          arrayDividedBySpacing.length > 2 ? arrayDividedBySpacing[2] : ""
+        `https://api.icndb.com/jokes/random?firstName=${arrayDividedBySpacing[0]
+        }&lastName=${arrayDividedBySpacing.length > 2 ? arrayDividedBySpacing[2] : ""
         }&limitTo=[${category}]&escape=javascript`
       );
     }
@@ -104,22 +110,26 @@ const Root:FC = () => {
     setNextJokeRender((prevState) => !prevState);
     setSubmittedPerson(newPerson);
   };
-  const handleNewPerson = (e: React.ChangeEvent<HTMLInputElement>):void =>{
+
+  const handleNewPerson = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.currentTarget.value
       ? setNewPerson(e.currentTarget.value)
       : setNewPerson("Chuck Norris");
   };
+
   const increaseJokesCounter = () => {
     jokesCounter < 100 && setJokesCounter((prevState) => prevState + 1);
   };
+
   const decreaseJokesCounter = () => {
     jokesCounter > 0 && setJokesCounter((prevState) => prevState - 1);
   };
-  const changeJokesCounter = (e:React.ChangeEvent<HTMLInputElement>) => {
+
+  const changeJokesCounter = (e: React.ChangeEvent<HTMLInputElement>) => {
     setJokesCounter(+e.currentTarget.value);
   };
 
-  const createJokesFile= () => {
+  const createJokesFile = () => {
     if (jokesCounter <= 100 && jokesCounter !== 0) {
       const element = document.createElement("a");
       const file = new Blob(
@@ -134,6 +144,7 @@ const Root:FC = () => {
       alert("You can pick a number from 1 to 100");
     }
   };
+
   const renderCardImg = () => {
     return submittedPerson !== "Chuck Norris" ? impersonateImage : cardImage;
   };

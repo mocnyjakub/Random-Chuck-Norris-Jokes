@@ -15,10 +15,6 @@ import { createContext } from "react";
         createJokesFile:()=>void,
         renderCardImg:()=>string, 
  }; 
-const defaultContextValue = {
-
-}
-
 
 const RootContext = createContext<ContextTypes | null>(null);
 export default RootContext;

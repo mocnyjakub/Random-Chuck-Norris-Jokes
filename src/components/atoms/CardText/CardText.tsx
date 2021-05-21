@@ -13,7 +13,7 @@ export const StyledP = styled.p`
 
 const CardText: FC = ():JSX.Element => {
   const context = useContext(RootContext);
-  return <StyledP>“{context.joke}”.</StyledP>;
+  return <StyledP>“{context.joke}”</StyledP>;
 };
 
 export default CardText;
