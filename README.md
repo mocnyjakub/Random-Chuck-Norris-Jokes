@@ -20,6 +20,7 @@
 ## Technologies Used
 
 - React - version 17.0.2
+- TypeScript - version 4.2.4
 - Material UI - version 0.20.2
 - Material UI Core - version 4.11.4
 - Material UI Icons - version 4.11.4
